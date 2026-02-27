@@ -7,35 +7,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --purple: #7C5CFC;
-    --purple-light: #EEE9FF;
-    --coral: #FF6B6B;
-    --coral-light: #FFF0F0;
-    --teal: #00C9A7;
-    --teal-light: #E0FFF8;
-    --gold: #FFB800;
-    --gold-light: #FFF8E0;
-    --blue: #4361EE;
-    --blue-light: #EAF0FF;
-    --ink: #1A1A2E;
-    --ink2: #3D3D5C;
-    --muted: #8884A0;
-    --bg: #F7F7FB;
-    --white: #FFFFFF;
+    --purple: #7C5CFC; --purple-light: #EEE9FF;
+    --coral: #FF6B6B; --teal: #00C9A7;
+    --gold: #FFB800; --blue: #4361EE;
+    --ink: #1A1A2E; --ink2: #3D3D5C; --muted: #8884A0;
+    --bg: #F7F7FB; --white: #FFFFFF;
     --shadow: 0 4px 24px rgba(124,92,252,0.10);
-    --shadow-lg: 0 8px 40px rgba(124,92,252,0.15);
   }
+  body { font-family: 'Inter', sans-serif; background: #0E0E1A; color: var(--ink); overflow: hidden; height: 100vh; width: 100vw; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #0E0E1A;
-    color: var(--ink);
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+  /* LANG TOGGLE */
+  .lang-toggle {
+    position: fixed; top: 20px; left: 28px; z-index: 200;
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25); color: white;
+    padding: 8px 18px; border-radius: 100px; cursor: pointer;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+    transition: all 0.2s ease; font-family: 'Inter', sans-serif;
   }
+  .lang-toggle:hover { background: rgba(255,255,255,0.22); transform: scale(1.03); }
 
   /* SLIDESHOW */
   .slideshow { width: 100vw; height: 100vh; position: relative; }
@@ -43,31 +34,18 @@
     position: absolute; inset: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: translateX(40px);
-    padding: 48px;
-    overflow: hidden;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transform: translateX(40px); padding: 48px; overflow: hidden;
   }
   .slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
   .slide.exit { opacity: 0; transform: translateX(-40px); }
 
-  /* PROGRESS BAR */
-  .progress-bar {
-    position: fixed; top: 0; left: 0; height: 4px;
-    background: linear-gradient(90deg, var(--purple), var(--coral));
-    transition: width 0.4s ease; z-index: 100; border-radius: 0 2px 2px 0;
-  }
+  /* PROGRESS */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--purple), var(--coral)); transition: width 0.4s ease; z-index: 100; border-radius: 0 2px 2px 0; }
 
   /* NAV DOTS */
-  .nav-dots {
-    position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 10px; z-index: 100;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(255,255,255,0.25); cursor: pointer;
-    transition: all 0.3s ease; border: none;
-  }
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.25); cursor: pointer; transition: all 0.3s ease; border: none; }
   .dot.active { background: var(--white); transform: scale(1.4); }
 
   /* ARROWS */
@@ -82,260 +60,135 @@
   .nav-arrow:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
   .nav-arrow.prev { left: calc(50% - 60px); }
   .nav-arrow.next { left: calc(50% + 12px); }
+  .slide-counter { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 500; z-index: 99; letter-spacing: 0.1em; }
 
-  /* SLIDE COUNTER */
-  .slide-counter {
-    position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
-    color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 500; z-index: 99;
-    letter-spacing: 0.1em;
-  }
-
-  /* =========== SLIDE 1: COVER =========== */
-  .slide-cover {
-    background: linear-gradient(135deg, #1A0533 0%, #0F0F2D 40%, #001F3F 100%);
-  }
-  .cover-glow {
-    position: absolute; width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(124,92,252,0.35) 0%, transparent 70%);
-    top: 50%; left: 50%; transform: translate(-50%, -60%);
-    pointer-events: none;
-  }
-  .cover-glow-2 {
-    position: absolute; width: 400px; height: 400px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,107,107,0.2) 0%, transparent 70%);
-    bottom: 0; right: 10%; pointer-events: none;
-  }
-  .cover-tag {
-    background: rgba(124,92,252,0.2); border: 1px solid rgba(124,92,252,0.4);
-    color: #B79FFF; padding: 8px 20px; border-radius: 100px;
-    font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 32px; position: relative;
-  }
-  .cover-title {
-    font-size: clamp(36px, 5vw, 64px); font-weight: 900; color: white;
-    line-height: 1.1; text-align: center; position: relative;
-    max-width: 800px; margin-bottom: 16px;
-  }
-  .cover-title span { 
-    background: linear-gradient(90deg, #B79FFF, #FF9ECD, #FFB800);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .cover-subtitle {
-    color: rgba(255,255,255,0.5); font-size: 18px; font-weight: 400;
-    margin-bottom: 48px; position: relative; text-align: center;
-  }
-  .cover-name {
-    display: flex; align-items: center; gap: 16px; position: relative;
-  }
-  .cover-avatar {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple), var(--coral));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700; color: white;
-  }
-  .cover-name-text { color: white; }
-  .cover-name-text strong { font-size: 20px; font-weight: 700; display: block; }
+  /* COVER */
+  .slide-cover { background: linear-gradient(135deg, #1A0533 0%, #0F0F2D 40%, #001F3F 100%); }
+  .cover-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(124,92,252,0.35) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; }
+  .cover-glow-2 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,107,107,0.2) 0%, transparent 70%); bottom: 0; right: 10%; pointer-events: none; }
+  .cover-tag { background: rgba(124,92,252,0.2); border: 1px solid rgba(124,92,252,0.4); color: #B79FFF; padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 32px; position: relative; }
+  .cover-title { font-size: clamp(34px, 4.5vw, 60px); font-weight: 900; color: white; line-height: 1.1; text-align: center; position: relative; max-width: 800px; margin-bottom: 16px; }
+  .cover-title span { background: linear-gradient(90deg, #B79FFF, #FF9ECD, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cover-subtitle { color: rgba(255,255,255,0.5); font-size: 17px; font-weight: 400; margin-bottom: 40px; position: relative; text-align: center; }
+  .cover-name { display: flex; align-items: center; gap: 16px; position: relative; }
+  .cover-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--coral)); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; }
+  .cover-name-text strong { font-size: 20px; font-weight: 700; color: white; display: block; }
   .cover-name-text span { font-size: 14px; color: rgba(255,255,255,0.5); }
-  .cover-date {
-    position: absolute; bottom: 40px; right: 60px;
-    color: rgba(255,255,255,0.3); font-size: 13px; font-weight: 500;
-  }
-  .cover-objectives {
-    display: flex; gap: 12px; margin-top: 40px; position: relative; flex-wrap: wrap; justify-content: center;
-  }
-  .cover-obj-pill {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 100px;
-    font-size: 13px; font-weight: 500;
-  }
+  .cover-date { position: absolute; bottom: 40px; right: 60px; color: rgba(255,255,255,0.3); font-size: 13px; font-weight: 500; }
+  .cover-objectives { display: flex; gap: 10px; margin-top: 36px; position: relative; flex-wrap: wrap; justify-content: center; }
+  .cover-obj-pill { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); padding: 7px 15px; border-radius: 100px; font-size: 13px; font-weight: 500; }
 
-  /* =========== SLIDE 2: AT A GLANCE =========== */
-  .slide-glance { background: var(--bg); }
-  .slide-header { margin-bottom: 36px; text-align: center; }
-  .slide-header h2 { font-size: 36px; font-weight: 800; color: var(--ink); }
-  .slide-header p { font-size: 16px; color: var(--muted); margin-top: 8px; }
-  .glance-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
-    width: 100%; max-width: 1000px;
-  }
-  .glance-card {
-    background: white; border-radius: 20px; padding: 24px 16px;
-    text-align: center; box-shadow: var(--shadow);
-    border-top: 4px solid var(--color, var(--purple));
-    transition: transform 0.2s ease;
-  }
+  /* GLANCE SLIDE */
+  .slide-light { background: var(--bg); }
+  .slide-header { margin-bottom: 32px; text-align: center; }
+  .glance-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; width: 100%; max-width: 960px; }
+  .glance-card { background: white; border-radius: 20px; padding: 22px 14px; text-align: center; box-shadow: var(--shadow); border-top: 4px solid var(--color, var(--purple)); transition: transform 0.2s ease; }
   .glance-card:hover { transform: translateY(-4px); }
-  .glance-icon { font-size: 32px; margin-bottom: 12px; }
-  .glance-label { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .glance-status { font-size: 12px; color: var(--muted); }
-  .badge { 
-    display: inline-block; padding: 4px 10px; border-radius: 100px;
-    font-size: 11px; font-weight: 600; margin-top: 8px;
-  }
+  .glance-icon { font-size: 30px; margin-bottom: 10px; }
+  .glance-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; margin-top: 8px; }
   .badge-green { background: #E3FBF0; color: #00A86B; }
   .badge-blue { background: #EAF0FF; color: #4361EE; }
   .badge-orange { background: #FFF3E0; color: #E67E00; }
 
-  /* =========== GENERIC SLIDE STYLES =========== */
+  /* DARK SLIDES */
   .slide-dark { background: linear-gradient(135deg, #1A0533 0%, #0F0F2D 100%); }
-  .slide-light { background: #F7F7FB; }
-  .slide-white { background: white; }
-
-  .section-label {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--purple); margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-label::before {
-    content: ''; display: block; width: 24px; height: 3px;
-    background: var(--purple); border-radius: 2px;
-  }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-label::before { content: ''; display: block; width: 24px; height: 3px; background: var(--purple); border-radius: 2px; }
   .section-label.white { color: rgba(255,255,255,0.6); }
   .section-label.white::before { background: rgba(255,255,255,0.4); }
-
-  .slide-title { font-size: clamp(28px, 3vw, 42px); font-weight: 800; line-height: 1.15; }
+  .slide-title { font-size: clamp(26px, 3vw, 40px); font-weight: 800; line-height: 1.15; }
   .slide-title.white { color: white; }
   .slide-title.dark { color: var(--ink); }
 
-  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; max-width: 1000px; }
-  .content-col { display: flex; flex-direction: column; gap: 16px; }
-
-  /* ACHIEVEMENT CARDS */
-  .ach-card {
-    background: white; border-radius: 16px; padding: 20px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-    display: flex; align-items: flex-start; gap: 16px;
-  }
-  .ach-icon {
-    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 20px;
-  }
-  .ach-text h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .ach-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-  /* NEXT STEPS */
-  .next-card {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px; padding: 20px;
-    display: flex; align-items: flex-start; gap: 16px;
-  }
-  .step-num {
-    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(124,92,252,0.3); border: 1px solid rgba(124,92,252,0.5);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; color: #B79FFF;
-  }
-  .next-text h4 { font-size: 14px; font-weight: 600; color: white; margin-bottom: 4px; }
-  .next-text p { font-size: 12px; color: rgba(255,255,255,0.5); }
-  .next-date { 
-    font-size: 11px; font-weight: 600; color: #FFB800;
-    background: rgba(255,184,0,0.12); padding: 3px 10px; border-radius: 100px;
-    display: inline-block; margin-top: 6px;
-  }
+  /* WIN SLIDE */
+  .win-slide { background: linear-gradient(135deg, #0D0D1F 0%, #1A0533 100%); }
+  .win-hero { text-align: center; position: relative; z-index: 1; max-width: 680px; }
+  .win-emoji { font-size: 72px; margin-bottom: 20px; display: block; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  .win-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: white; line-height: 1.1; margin-bottom: 16px; }
+  .win-title span { background: linear-gradient(90deg, #7C5CFC, #FF6B6B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .win-desc { font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.65; max-width: 540px; margin: 0 auto 28px; }
+  .win-stats { display: flex; gap: 28px; justify-content: center; }
+  .win-stat { text-align: center; }
+  .win-stat strong { font-size: 34px; font-weight: 800; color: white; display: block; }
+  .win-stat span { font-size: 13px; color: rgba(255,255,255,0.45); }
 
   /* TIMELINE */
-  .timeline { display: flex; flex-direction: column; gap: 0; width: 100%; max-width: 800px; }
-  .timeline-item {
-    display: flex; gap: 24px; padding-bottom: 24px; position: relative;
-  }
+  .timeline { display: flex; flex-direction: column; gap: 0; width: 100%; }
+  .timeline-item { display: flex; gap: 20px; padding-bottom: 20px; position: relative; }
   .timeline-item:last-child { padding-bottom: 0; }
-  .timeline-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 120px; }
+  .timeline-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 110px; }
   .timeline-date { font-size: 11px; font-weight: 700; color: var(--color, var(--purple)); text-align: center; margin-bottom: 8px; }
-  .timeline-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--color, var(--purple)); position: relative; z-index: 1;
-    box-shadow: 0 0 0 4px rgba(124,92,252,0.15);
-  }
-  .timeline-line {
-    width: 2px; background: rgba(0,0,0,0.08); flex: 1; margin-top: 4px;
-  }
+  .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color, var(--purple)); position: relative; z-index: 1; box-shadow: 0 0 0 4px rgba(124,92,252,0.12); }
+  .timeline-line { width: 2px; background: rgba(0,0,0,0.08); flex: 1; margin-top: 4px; }
   .timeline-item:last-child .timeline-line { display: none; }
-  .timeline-content {
-    background: white; border-radius: 16px; padding: 16px 20px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06); flex: 1;
-    border-left: 4px solid var(--color, var(--purple));
-  }
+  .timeline-content { background: white; border-radius: 14px; padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); flex: 1; border-left: 4px solid var(--color, var(--purple)); }
   .timeline-content h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
   .timeline-content p { font-size: 12px; color: var(--muted); }
 
-  /* BIG WIN SLIDE */
-  .win-slide { background: linear-gradient(135deg, #0D0D1F 0%, #1A0533 100%); }
-  .win-hero {
-    text-align: center; position: relative; z-index: 1; max-width: 700px;
-  }
-  .win-emoji { font-size: 80px; margin-bottom: 24px; display: block; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-  .win-title { font-size: 56px; font-weight: 900; color: white; line-height: 1.1; margin-bottom: 16px; }
-  .win-title span { background: linear-gradient(90deg, #7C5CFC, #FF6B6B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .win-desc { font-size: 18px; color: rgba(255,255,255,0.65); line-height: 1.6; max-width: 560px; margin: 0 auto 32px; }
-  .win-stats { display: flex; gap: 32px; justify-content: center; }
-  .win-stat { text-align: center; }
-  .win-stat strong { font-size: 36px; font-weight: 800; color: white; display: block; }
-  .win-stat span { font-size: 13px; color: rgba(255,255,255,0.45); }
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; max-width: 1000px; align-items: start; }
 
-  /* LOGO WALL */
-  .logo-grid {
-    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center;
-    max-width: 600px;
-  }
-  .logo-pill {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-    padding: 10px 20px; border-radius: 100px;
-    font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.75);
-    letter-spacing: 0.03em;
-  }
-  .logo-pill.highlight {
-    background: rgba(124,92,252,0.2); border-color: rgba(124,92,252,0.4);
-    color: #B79FFF;
-  }
-
-  /* TWO COL GENERAL */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; max-width: 1000px; align-items: start; }
+  /* NEXT CARDS (dark slides) */
+  .next-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; }
+  .next-text h4 { font-size: 14px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .next-text p { font-size: 12px; color: rgba(255,255,255,0.5); }
 
   /* EVENT CARDS */
-  .event-card {
-    background: white; border-radius: 20px; padding: 24px;
-    box-shadow: var(--shadow); border-top: 5px solid var(--color, var(--purple));
-  }
-  .event-card .ev-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .ev-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-  .ev-title { font-size: 18px; font-weight: 700; color: var(--ink); }
-  .ev-sub { font-size: 13px; color: var(--muted); }
-  .ev-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .event-card { background: white; border-radius: 20px; padding: 22px; box-shadow: var(--shadow); border-top: 5px solid var(--color, var(--purple)); }
+  .ev-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .ev-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .ev-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+  .ev-sub { font-size: 12px; color: var(--muted); }
+  .ev-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
   .ev-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--ink2); line-height: 1.5; }
   .ev-list li::before { content: '→'; color: var(--color, var(--purple)); font-weight: 700; flex-shrink: 0; }
   .done-list li::before { content: '✓'; color: #00A86B; }
 
-  /* CLOSING */
+  /* CLOSE */
   .slide-close { background: linear-gradient(135deg, #0D0D1F 0%, #1A0533 50%, #001F3F 100%); }
-  .close-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; max-width: 900px; width: 100%; }
-  .close-card {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px; padding: 24px; text-align: center;
-  }
-  .close-card .icon { font-size: 36px; margin-bottom: 12px; }
-  .close-card h4 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+  .close-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; max-width: 880px; width: 100%; }
+  .close-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 22px; text-align: center; }
+  .close-card .icon { font-size: 32px; margin-bottom: 10px; }
+  .close-card h4 { font-size: 15px; font-weight: 700; color: white; margin-bottom: 7px; }
   .close-card p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
 
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    .slide { padding: 24px; }
-    .glance-grid { grid-template-columns: repeat(3, 1fr); }
-    .two-col, .content-grid { grid-template-columns: 1fr; }
-    .close-grid { grid-template-columns: 1fr; }
-    .win-title { font-size: 36px; }
-    .win-stats { gap: 16px; }
+  /* ORGANIC PIVOT CARD */
+  .pivot-card {
+    background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(0,201,167,0.1));
+    border: 1px solid rgba(124,92,252,0.35); border-radius: 16px;
+    padding: 18px 22px; display: flex; align-items: flex-start; gap: 16px;
+    grid-column: span 3;
   }
+  .pivot-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .pivot-text h4 { font-size: 14px; font-weight: 700; color: #B79FFF; margin-bottom: 6px; }
+  .pivot-text p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+  /* SG WINS GRID */
+  .sg-wins-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; width: 100%; max-width: 900px; }
+
+  /* LUMA SLIDE */
+  .slide-luma { background: linear-gradient(135deg, #0f0f2d 0%, #1a0030 60%, #001428 100%); }
+  .luma-content { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; width: 100%; max-width: 1000px; align-items: center; position: relative; z-index: 1; }
+  .luma-img { border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); width: 100%; }
+  .luma-img img { width: 100%; display: block; }
+  .luma-detail-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 28px; }
+  .luma-meta { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+  .luma-meta-row { display: flex; align-items: flex-start; gap: 12px; }
+  .luma-meta-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .luma-meta-text strong { font-size: 13px; font-weight: 600; color: white; display: block; }
+  .luma-meta-text span { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .luma-cta-pill { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; background: rgba(124,92,252,0.25); border: 1px solid rgba(124,92,252,0.4); padding: 10px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #B79FFF; }
 </style>
 </head>
 <body>
 
+<!-- Language Toggle -->
+<button class="lang-toggle" id="langToggle" onclick="toggleLang()">中文</button>
+
 <div class="progress-bar" id="progress"></div>
-
-<!-- NAV DOTS -->
 <div class="nav-dots" id="navDots"></div>
-
-<!-- ARROWS -->
 <button class="nav-arrow prev" onclick="changeSlide(-1)">←</button>
 <button class="nav-arrow next" onclick="changeSlide(1)">→</button>
 <div class="slide-counter" id="counter"></div>
@@ -346,16 +199,14 @@
   <div class="slide slide-cover active">
     <div class="cover-glow"></div>
     <div class="cover-glow-2"></div>
-    <div class="cover-tag">Weekly Momentum Report · 26 Feb 2026</div>
-    <h1 class="cover-title">
-      Launches, Press &<br><span>Partnerships in Motion</span>
-    </h1>
-    <p class="cover-subtitle">5 Objectives · Milestones Achieved · What's Coming Next</p>
+    <div class="cover-tag" data-i18n="cover-tag">Weekly Momentum Report · 26 Feb 2026</div>
+    <h1 class="cover-title" data-i18n="cover-title">Launches, Press &<br><span>Partnerships in Motion</span></h1>
+    <p class="cover-subtitle" data-i18n="cover-subtitle">5 Objectives · Milestones Achieved · What's Coming Next</p>
     <div class="cover-name">
       <div class="cover-avatar">N</div>
       <div class="cover-name-text">
         <strong>Nicholas</strong>
-        <span>ChronoAI · Marketing & Partnerships</span>
+        <span data-i18n="cover-role">ChronoAI · Marketing & Partnerships</span>
       </div>
     </div>
     <div class="cover-objectives">
@@ -365,73 +216,60 @@
       <span class="cover-obj-pill">🤝 Events</span>
       <span class="cover-obj-pill">🌙 Moonshot</span>
     </div>
-    <div class="cover-date">Week of 20 – 26 Feb 2026</div>
+    <div class="cover-date" data-i18n="cover-week">Week of 20 – 26 Feb 2026</div>
   </div>
 
   <!-- SLIDE 2: AT A GLANCE -->
   <div class="slide slide-light">
     <div class="slide-header">
-      <h2 class="slide-title dark">This Week at a Glance</h2>
-      <p>Five objectives — all moving forward.</p>
+      <h2 class="slide-title dark" data-i18n="glance-title">This Week at a Glance</h2>
+      <p style="font-size:16px;color:var(--muted);margin-top:8px" data-i18n="glance-subtitle">Five objectives — all moving forward.</p>
     </div>
     <div class="glance-grid">
       <div class="glance-card" style="--color:#7C5CFC">
         <div class="glance-icon">🚀</div>
         <div class="glance-label">RiteSet</div>
-        <div class="glance-status">App Store Ready</div>
-        <span class="badge badge-green">1.0 Live ✓</span>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="glance-riteset-status">App Store Ready</div>
+        <span class="badge badge-green" data-i18n="glance-riteset-badge">1.0 Live ✓</span>
       </div>
       <div class="glance-card" style="--color:#00C9A7">
         <div class="glance-icon">🌱</div>
         <div class="glance-label">SoulGarden</div>
-        <div class="glance-status">PR & Comms Engine Live</div>
-        <span class="badge badge-green">5 Wins ✓</span>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="glance-sg-status">Organic Growth Push</div>
+        <span class="badge badge-green" data-i18n="glance-sg-badge">3 Wins ✓</span>
       </div>
       <div class="glance-card" style="--color:#FF6B6B">
         <div class="glance-icon">⚡</div>
         <div class="glance-label">Hackathon</div>
-        <div class="glance-status">Proposal drafted</div>
-        <span class="badge badge-blue">In Progress</span>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="glance-hack-status">Proposal drafted</div>
+        <span class="badge badge-blue" data-i18n="glance-hack-badge">In Progress</span>
       </div>
       <div class="glance-card" style="--color:#FFB800">
         <div class="glance-icon">🤝</div>
         <div class="glance-label">Events</div>
-        <div class="glance-status">2 Partnership Meetings</div>
-        <span class="badge badge-green">Active ✓</span>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="glance-events-status">2 Partnership Meetings</div>
+        <span class="badge badge-green" data-i18n="glance-events-badge">Active ✓</span>
       </div>
       <div class="glance-card" style="--color:#4361EE">
         <div class="glance-icon">🌙</div>
         <div class="glance-label">Moonshot AI</div>
-        <div class="glance-status">Call Scheduled</div>
-        <span class="badge badge-orange">Upcoming</span>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="glance-moonshot-status">Call Scheduled</div>
+        <span class="badge badge-orange" data-i18n="glance-moonshot-badge">Upcoming</span>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 3: RITESET 1.0 — BIG WIN -->
+  <!-- SLIDE 3: RITESET 1.0 WIN -->
   <div class="slide win-slide">
     <div class="cover-glow" style="opacity:0.5"></div>
     <div class="win-hero">
       <span class="win-emoji">🎉</span>
-      <h2 class="win-title">RiteSet 1.0 is <span>App Store Ready</span></h2>
-      <p class="win-desc">
-        As of 25 February, RiteSet 1.0 has been approved and is ready for distribution on the App Store. 
-        Through the SoulGarden upload process, the team has been fully educated on submission requirements — 
-        and we got it approved in just <strong style="color:white">2–3 days.</strong>
-      </p>
+      <h2 class="win-title" data-i18n="win-title">RiteSet 1.0 is <span>App Store Ready</span></h2>
+      <p class="win-desc" data-i18n="win-desc">As of 25 February, RiteSet 1.0 has been approved and is ready for distribution on the App Store. Through the SoulGarden upload process, the team has been fully educated on submission requirements — and we got it approved in just <strong style="color:white">2–3 days.</strong></p>
       <div class="win-stats">
-        <div class="win-stat">
-          <strong>2–3</strong>
-          <span>Days to Approval</span>
-        </div>
-        <div class="win-stat">
-          <strong>1.0</strong>
-          <span>Version Live</span>
-        </div>
-        <div class="win-stat">
-          <strong>✓</strong>
-          <span>App Store Ready</span>
-        </div>
+        <div class="win-stat"><strong>2–3</strong><span data-i18n="win-stat1-label">Days to Approval</span></div>
+        <div class="win-stat"><strong>1.0</strong><span data-i18n="win-stat2-label">Version Live</span></div>
+        <div class="win-stat"><strong>✓</strong><span data-i18n="win-stat3-label">App Store Ready</span></div>
       </div>
     </div>
   </div>
@@ -439,88 +277,48 @@
   <!-- SLIDE 4: RITESET ROADMAP -->
   <div class="slide slide-light">
     <div style="width:100%;max-width:900px">
-      <div class="section-label">Objective 1 · RiteSet</div>
-      <h2 class="slide-title dark" style="margin-bottom:32px">RiteSet 2.0 — What's Next</h2>
-      <div class="two-col" style="align-items:start">
+      <div class="section-label" data-i18n="riteset-section-label">Objective 1 · RiteSet</div>
+      <h2 class="slide-title dark" style="margin-bottom:28px" data-i18n="riteset-next-title">RiteSet 2.0 — What's Next</h2>
+      <div class="two-col">
         <div>
-          <p style="font-size:13px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px">App Submission Track</p>
+          <p style="font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px" data-i18n="app-track-label">App Submission Track</p>
           <div class="timeline">
             <div class="timeline-item" style="--color:#7C5CFC">
-              <div class="timeline-left">
-                <div class="timeline-date">27 Feb</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-line"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#7C5CFC">
-                <h4>App Flow Update</h4>
-                <p>Current experience refresh — new flows locked in</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date">27 Feb</div><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content" style="border-color:#7C5CFC"><h4 data-i18n="tl1-title">App Flow Update</h4><p data-i18n="tl1-desc">Current experience refresh — new flows locked in</p></div>
             </div>
             <div class="timeline-item" style="--color:#4361EE">
-              <div class="timeline-left">
-                <div class="timeline-date">27 Feb – 2 Mar</div>
-                <div class="timeline-dot" style="background:#4361EE"></div>
-                <div class="timeline-line"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#4361EE">
-                <h4>Backend AI Logic</h4>
-                <p>Refining the intelligence layer — smarter, faster, better</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date" style="color:#4361EE">27 Feb – 2 Mar</div><div class="timeline-dot" style="background:#4361EE"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content" style="border-color:#4361EE"><h4 data-i18n="tl2-title">Backend AI Logic</h4><p data-i18n="tl2-desc">Refining the intelligence layer — smarter, faster, better</p></div>
             </div>
             <div class="timeline-item" style="--color:#00C9A7">
-              <div class="timeline-left">
-                <div class="timeline-date">2 – 4 Mar</div>
-                <div class="timeline-dot" style="background:#00C9A7"></div>
-                <div class="timeline-line"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#00C9A7">
-                <h4>Design & Branding Finalisation</h4>
-                <p>Polish UI, finalize visual identity and logic</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date" style="color:#00C9A7">2 – 4 Mar</div><div class="timeline-dot" style="background:#00C9A7"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content" style="border-color:#00C9A7"><h4 data-i18n="tl3-title">Design & Branding Finalisation</h4><p data-i18n="tl3-desc">Polish UI, finalize visual identity and logic</p></div>
             </div>
             <div class="timeline-item" style="--color:#FF6B6B">
-              <div class="timeline-left">
-                <div class="timeline-date">4 – 6 Mar</div>
-                <div class="timeline-dot" style="background:#FF6B6B"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#FF6B6B">
-                <h4>Submit RiteSet 2.0 🚀</h4>
-                <p>Final version submitted to App Store</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date" style="color:#FF6B6B">4 – 6 Mar</div><div class="timeline-dot" style="background:#FF6B6B"></div></div>
+              <div class="timeline-content" style="border-color:#FF6B6B"><h4 data-i18n="tl4-title">Submit RiteSet 2.0 🚀</h4><p data-i18n="tl4-desc">Final version submitted to App Store</p></div>
             </div>
           </div>
         </div>
         <div>
-          <p style="font-size:13px;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px">Marketing Track</p>
+          <p style="font-size:12px;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px" data-i18n="mkt-track-label">Marketing Track</p>
           <div class="timeline">
             <div class="timeline-item" style="--color:#FF6B6B">
-              <div class="timeline-left">
-                <div class="timeline-date">2 – 3 Mar</div>
-                <div class="timeline-dot" style="background:#FF6B6B"></div>
-                <div class="timeline-line"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#FF6B6B">
-                <h4>Marketing Planning</h4>
-                <p>Go-to-market strategy, positioning and channels</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date" style="color:#FF6B6B">2 – 3 Mar</div><div class="timeline-dot" style="background:#FF6B6B"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content" style="border-color:#FF6B6B"><h4 data-i18n="tl5-title">Marketing Planning</h4><p data-i18n="tl5-desc">Go-to-market strategy, positioning and channels</p></div>
             </div>
             <div class="timeline-item" style="--color:#FFB800">
-              <div class="timeline-left">
-                <div class="timeline-date">4 – 6 Mar</div>
-                <div class="timeline-dot" style="background:#FFB800"></div>
-              </div>
-              <div class="timeline-content" style="border-color:#FFB800">
-                <h4>Marketing Assets Creation</h4>
-                <p>Creatives, copy, and campaign assets ready to ship</p>
-              </div>
+              <div class="timeline-left"><div class="timeline-date" style="color:#FFB800">4 – 6 Mar</div><div class="timeline-dot" style="background:#FFB800"></div></div>
+              <div class="timeline-content" style="border-color:#FFB800"><h4 data-i18n="tl6-title">Marketing Assets Creation</h4><p data-i18n="tl6-desc">Creatives, copy, and campaign assets ready to ship</p></div>
             </div>
           </div>
-          <div style="background:white;border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-top:16px;border-left:4px solid #7C5CFC">
-            <p style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">Focus Areas for 2.0</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-              <span style="background:#EEE9FF;color:#7C5CFC;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">UI Design</span>
-              <span style="background:#EAF0FF;color:#4361EE;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">Backend AI</span>
-              <span style="background:#E3FBF0;color:#00A86B;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">Branding</span>
+          <div style="background:white;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-top:14px;border-left:4px solid #7C5CFC">
+            <p style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px" data-i18n="focus-label">Focus Areas for 2.0</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:#EEE9FF;color:#7C5CFC;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600" data-i18n="focus-ui">UI Design</span>
+              <span style="background:#EAF0FF;color:#4361EE;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600" data-i18n="focus-ai">Backend AI</span>
+              <span style="background:#E3FBF0;color:#00A86B;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600" data-i18n="focus-brand">Branding</span>
             </div>
           </div>
         </div>
@@ -528,150 +326,120 @@
     </div>
   </div>
 
-  <!-- SLIDE 5: SOULGARDEN WINS -->
+  <!-- SLIDE 5: SOULGARDEN WINS (updated — no press release) -->
   <div class="slide slide-dark">
-    <div class="cover-glow" style="opacity:0.3;top:30%"></div>
-    <div style="width:100%;max-width:1000px;position:relative;z-index:1">
-      <div class="section-label white">Objective 2 · SoulGarden</div>
-      <h2 class="slide-title white" style="margin-bottom:8px">SoulGarden — Big Wins This Week</h2>
-      <p style="color:rgba(255,255,255,0.45);font-size:15px;margin-bottom:28px">The PR and comms engine is fully live.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="next-card" style="background:rgba(255,255,255,0.05)">
-          <div style="font-size:24px;flex-shrink:0">📄</div>
+    <div class="cover-glow" style="opacity:0.25;top:30%"></div>
+    <div style="width:100%;max-width:900px;position:relative;z-index:1">
+      <div class="section-label white" data-i18n="sg-section-label">Objective 2 · SoulGarden</div>
+      <h2 class="slide-title white" style="margin-bottom:6px" data-i18n="sg-wins-title">SoulGarden — Big Wins This Week</h2>
+      <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-bottom:22px" data-i18n="sg-wins-subtitle">Building momentum through community and organic growth.</p>
+      <div class="sg-wins-grid">
+        <!-- Achievement 1: Media Kit -->
+        <div class="next-card" style="flex-direction:column;gap:10px">
+          <div style="font-size:26px">📦</div>
           <div>
-            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:4px">Final Press Release Copy</h4>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px">Polished and ready — positioned for maximum media pickup.</p>
+            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:5px" data-i18n="ach1-title">Media Kit Completed</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:13px" data-i18n="ach1-desc">Press-ready kit for outreach to 100+ media contacts.</p>
           </div>
         </div>
-        <div class="next-card" style="background:rgba(255,255,255,0.05)">
-          <div style="font-size:24px;flex-shrink:0">🗞️</div>
+        <!-- Achievement 2: Podcast with Wendy -->
+        <div class="next-card" style="flex-direction:column;gap:10px">
+          <div style="font-size:26px">🎙️</div>
           <div>
-            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:4px">PR Newswire Deal Secured</h4>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px">Content syndication package — premium tech & general news outlets.</p>
+            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:5px" data-i18n="ach2-title">Era of AI Podcast Secured</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:13px" data-i18n="ach2-desc">Featuring Wendy — scripting underway, recording in March.</p>
           </div>
         </div>
-        <div class="next-card" style="background:rgba(255,255,255,0.05)">
-          <div style="font-size:24px;flex-shrink:0">📦</div>
+        <!-- Achievement 3: Soft Launch Party -->
+        <div class="next-card" style="flex-direction:column;gap:10px">
+          <div style="font-size:26px">🎉</div>
           <div>
-            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:4px">Media Kit Completed</h4>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px">Press-ready kit for outreach to 100+ media contacts.</p>
+            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:5px" data-i18n="ach3-title">SoulGarden Soft Launch Party — 12 March</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:13px" data-i18n="ach3-desc">Proposal underway. Community event to amplify launch momentum.</p>
           </div>
         </div>
-        <div class="next-card" style="background:rgba(255,255,255,0.05)">
-          <div style="font-size:24px;flex-shrink:0">🎙️</div>
-          <div>
-            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:4px">Era of AI Podcast Secured</h4>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px">Scripting with Dannick + Calvin, recording in March.</p>
-          </div>
-        </div>
-        <div class="next-card" style="background:rgba(255,255,255,0.05);grid-column:span 2">
-          <div style="font-size:24px;flex-shrink:0">🎉</div>
-          <div>
-            <h4 style="color:white;font-size:14px;font-weight:700;margin-bottom:4px">SoulGarden Soft Launch Party — 12 March</h4>
-            <p style="color:rgba(255,255,255,0.5);font-size:13px">Proposal underway. Community event to amplify launch momentum.</p>
+        <!-- Strategic Pivot Explanation -->
+        <div class="pivot-card">
+          <div class="pivot-icon">🔄</div>
+          <div class="pivot-text">
+            <h4 data-i18n="organic-title">Strategic Pivot: Organic-First Growth</h4>
+            <p data-i18n="organic-desc">After team discussion, we're stepping back from press releases and paid distribution. Our focus is now on community-led growth, organic content, and earned media — a more authentic path to building lasting user trust.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 6: PR NEWSWIRE / LOGO STRATEGY -->
-  <div class="slide slide-dark">
-    <div class="cover-glow-2" style="opacity:0.4"></div>
-    <div style="width:100%;max-width:1000px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+  <!-- SLIDE 6: LUMA EVENT (new slide replacing PR Newswire) -->
+  <div class="slide slide-luma">
+    <div class="cover-glow" style="opacity:0.3;background:radial-gradient(circle,rgba(255,107,107,0.3) 0%,transparent 70%)"></div>
+    <div class="luma-content">
+      <div class="luma-img">
+        <img src="./luma-event.png" alt="SoulGarden Soft Launch — Lu.ma listing">
+      </div>
       <div>
-        <div class="section-label white">SoulGarden · PR Strategy</div>
-        <h2 class="slide-title white" style="font-size:32px;margin-bottom:16px">Why PR Newswire? The Logo Trust Strategy.</h2>
-        <p style="color:rgba(255,255,255,0.55);font-size:14px;line-height:1.7;margin-bottom:24px">
-          Distribution across premium outlets gives us something powerful: 
-          <strong style="color:white">the credibility of their brand equity.</strong>
-        </p>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;align-items:flex-start;gap:12px">
-            <span style="color:#7C5CFC;font-size:18px;flex-shrink:0">◆</span>
-            <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6"><strong style="color:white">Instant Trust Transfer</strong> — Users see Forbes, Bloomberg, TechCrunch and their trust threshold drops immediately.</p>
+        <div class="section-label white" data-i18n="luma-section">SoulGarden · Soft Launch</div>
+        <h2 class="slide-title white" style="margin-bottom:8px" data-i18n="luma-title">First Bloom — Save the Date 🌸</h2>
+        <p style="color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:20px;font-style:italic" data-i18n="luma-subtitle">A fresh look into AI Manifestation</p>
+        <div class="luma-detail-card">
+          <div class="luma-meta">
+            <div class="luma-meta-row">
+              <div class="luma-meta-icon">📅</div>
+              <div class="luma-meta-text">
+                <strong data-i18n="luma-date">Thursday, 12 March · 3:30 PM – 6:00 PM SGT</strong>
+              </div>
+            </div>
+            <div class="luma-meta-row">
+              <div class="luma-meta-icon">📍</div>
+              <div class="luma-meta-text">
+                <strong data-i18n="luma-venue">8 Marina Boulevard, MBFC Tower 1, #14-02</strong>
+              </div>
+            </div>
+            <div class="luma-meta-row">
+              <div class="luma-meta-icon">✨</div>
+              <div class="luma-meta-text">
+                <span data-i18n="luma-desc">Celebrate the launch of SoulGarden — the AI manifestation app where your wildest dreams become adorable, collectible plants. Built by women, for anyone ready to manifest with a little magic. Hosted by ChronoAI.</span>
+              </div>
+            </div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:12px">
-            <span style="color:#00C9A7;font-size:18px;flex-shrink:0">◆</span>
-            <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6"><strong style="color:white">Accelerates Conversion</strong> — "As seen in" logos reduce sign-up friction and boost landing page CVR.</p>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:12px">
-            <span style="color:#FFB800;font-size:18px;flex-shrink:0">◆</span>
-            <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6"><strong style="color:white">Partnership Currency</strong> — Media logos open doors with investors, partners, and enterprise clients.</p>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:12px">
-            <span style="color:#FF6B6B;font-size:18px;flex-shrink:0">◆</span>
-            <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6"><strong style="color:white">Evergreen Asset</strong> — One press run generates logos we display across all marketing, forever.</p>
-          </div>
+          <div class="luma-cta-pill" data-i18n="luma-cta">🔗 Posted on Lu.ma · One-Click RSVP</div>
         </div>
-      </div>
-      <div style="text-align:center">
-        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em">Example: Headspace App Store strategy</p>
-        <img src="./headspace-logos-example.png" alt="Logo wall example — Headspace" 
-          style="width:100%;max-width:360px;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)">
-        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px">This is the playbook. SoulGarden will have its own logo wall.</p>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 7: SOULGARDEN NEXT STEPS -->
+  <!-- SLIDE 7: SOULGARDEN NEXT STEPS (updated — no press release) -->
   <div class="slide slide-light">
-    <div style="width:100%;max-width:900px">
-      <div class="section-label">Objective 2 · SoulGarden</div>
-      <h2 class="slide-title dark" style="margin-bottom:28px">SoulGarden — Next Steps</h2>
+    <div style="width:100%;max-width:860px">
+      <div class="section-label" data-i18n="sg-section-label">Objective 2 · SoulGarden</div>
+      <h2 class="slide-title dark" style="margin-bottom:26px" data-i18n="sg-next-title">SoulGarden — Next Steps</h2>
       <div class="timeline">
         <div class="timeline-item" style="--color:#00C9A7">
-          <div class="timeline-left">
-            <div class="timeline-date" style="color:#00C9A7">3 Mar</div>
-            <div class="timeline-dot" style="background:#00C9A7;box-shadow:0 0 0 4px rgba(0,201,167,0.15)"></div>
-            <div class="timeline-line"></div>
-          </div>
+          <div class="timeline-left"><div class="timeline-date" style="color:#00C9A7">3 Mar</div><div class="timeline-dot" style="background:#00C9A7;box-shadow:0 0 0 4px rgba(0,201,167,0.15)"></div><div class="timeline-line"></div></div>
           <div class="timeline-content" style="border-color:#00C9A7">
-            <h4>Media Kit Blast — 100+ Press Contacts</h4>
-            <p>Send media kits with SoulGarden live link to press and media outlets globally.</p>
-          </div>
-        </div>
-        <div class="timeline-item" style="--color:#7C5CFC">
-          <div class="timeline-left">
-            <div class="timeline-date" style="color:#7C5CFC">3 Mar (Tue)</div>
-            <div class="timeline-dot" style="background:#7C5CFC"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="timeline-content" style="border-color:#7C5CFC">
-            <h4>Press Release Live on PR Newswire</h4>
-            <p>Global English circuit — Tuesday selected for maximum media pickup and editorial attention.</p>
+            <h4 data-i18n="sg-tl1-title">Media Kit Blast — 100+ Press Contacts</h4>
+            <p data-i18n="sg-tl1-desc">Send media kits with SoulGarden live link to press and media outlets globally.</p>
           </div>
         </div>
         <div class="timeline-item" style="--color:#4361EE">
-          <div class="timeline-left">
-            <div class="timeline-date" style="color:#4361EE">5 or 10 Mar</div>
-            <div class="timeline-dot" style="background:#4361EE"></div>
-            <div class="timeline-line"></div>
-          </div>
+          <div class="timeline-left"><div class="timeline-date" style="color:#4361EE">5 or 10 Mar</div><div class="timeline-dot" style="background:#4361EE"></div><div class="timeline-line"></div></div>
           <div class="timeline-content" style="border-color:#4361EE">
-            <h4>e27 Newsletter Feature</h4>
-            <p>180K followers — SoulGarden featured in Southeast Asia's premier tech newsletter.</p>
+            <h4 data-i18n="sg-tl2-title">e27 Newsletter Feature</h4>
+            <p data-i18n="sg-tl2-desc">180K followers — SoulGarden featured in Southeast Asia's premier tech newsletter.</p>
           </div>
         </div>
-        <div class="timeline-item" style="--color:#FF6B6B">
-          <div class="timeline-left">
-            <div class="timeline-date" style="color:#FF6B6B">Mar / Apr</div>
-            <div class="timeline-dot" style="background:#FF6B6B"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="timeline-content" style="border-color:#FF6B6B">
-            <h4>Era of AI Podcast Release</h4>
-            <p>Script with Dannick + Calvin, recorded in March. Release late March or April.</p>
+        <div class="timeline-item" style="--color:#7C5CFC">
+          <div class="timeline-left"><div class="timeline-date" style="color:#7C5CFC">Mar / Apr</div><div class="timeline-dot" style="background:#7C5CFC"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content" style="border-color:#7C5CFC">
+            <h4 data-i18n="sg-tl3-title">Era of AI Podcast — with Wendy</h4>
+            <p data-i18n="sg-tl3-desc">Script in March, recording in March. Release end March or April.</p>
           </div>
         </div>
         <div class="timeline-item" style="--color:#FFB800">
-          <div class="timeline-left">
-            <div class="timeline-date" style="color:#FFB800">12 Mar</div>
-            <div class="timeline-dot" style="background:#FFB800;box-shadow:0 0 0 4px rgba(255,184,0,0.15)"></div>
-          </div>
+          <div class="timeline-left"><div class="timeline-date" style="color:#FFB800">12 Mar</div><div class="timeline-dot" style="background:#FFB800;box-shadow:0 0 0 4px rgba(255,184,0,0.15)"></div></div>
           <div class="timeline-content" style="border-color:#FFB800">
-            <h4>Soft Launch Party 🎊</h4>
-            <p>Finalize event proposal and post to Lu.ma. Community gathering to celebrate SoulGarden's launch.</p>
+            <h4 data-i18n="sg-tl4-title">Soft Launch Party 🎊</h4>
+            <p data-i18n="sg-tl4-desc">Finalize event proposal and post to Lu.ma. Community gathering to celebrate SoulGarden's launch.</p>
           </div>
         </div>
       </div>
@@ -680,69 +448,52 @@
 
   <!-- SLIDE 8: HACKATHON + EVENTS -->
   <div class="slide slide-light">
-    <div style="width:100%;max-width:1000px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
-        <!-- HACKATHON -->
+    <div style="width:100%;max-width:960px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
         <div>
-          <div class="section-label">Objective 3 · ChronoAI</div>
-          <h2 class="slide-title dark" style="font-size:26px;margin-bottom:20px">1st Hackathon</h2>
-          <div class="event-card" style="--color:#FF6B6B;margin-bottom:16px">
+          <div class="section-label" data-i18n="hack-section">Objective 3 · ChronoAI</div>
+          <h2 class="slide-title dark" style="font-size:24px;margin-bottom:18px" data-i18n="hack-title">1st Hackathon</h2>
+          <div class="event-card" style="--color:#FF6B6B;margin-bottom:14px">
             <div class="ev-header">
               <div class="ev-icon" style="background:#FFF0F0">⚡</div>
-              <div>
-                <div class="ev-title">This Week</div>
-                <div class="ev-sub">Hackathon Proposal Drafted</div>
-              </div>
+              <div><div class="ev-title" data-i18n="hack-done-header">This Week</div><div class="ev-sub" data-i18n="hack-done-sub">Hackathon Proposal Drafted</div></div>
             </div>
-            <ul class="ev-list done-list">
-              <li>Hackathon proposal completed</li>
-            </ul>
+            <ul class="ev-list done-list"><li data-i18n="hack-done-1">Hackathon proposal completed</li></ul>
           </div>
           <div class="event-card" style="--color:#7C5CFC">
             <div class="ev-header">
               <div class="ev-icon" style="background:#EEE9FF">🎯</div>
-              <div>
-                <div class="ev-title">Next Steps</div>
-                <div class="ev-sub">Finalize & Launch</div>
-              </div>
+              <div><div class="ev-title" data-i18n="hack-next-header">Next Steps</div><div class="ev-sub" data-i18n="hack-next-sub">Finalize & Launch</div></div>
             </div>
             <ul class="ev-list">
-              <li>Finalize proposal and post to Lu.ma</li>
-              <li>Reach out to all major universities in Singapore</li>
+              <li data-i18n="hack-next-1">Finalize proposal and post to Lu.ma</li>
+              <li data-i18n="hack-next-2">Reach out to all major universities in Singapore</li>
             </ul>
           </div>
         </div>
-
-        <!-- EVENTS -->
         <div>
-          <div class="section-label">Objective 4 · Events</div>
-          <h2 class="slide-title dark" style="font-size:26px;margin-bottom:20px">Partnerships & Events</h2>
-          <div class="event-card" style="--color:#FFB800;margin-bottom:16px">
+          <div class="section-label" data-i18n="events-section">Objective 4 · Events</div>
+          <h2 class="slide-title dark" style="font-size:24px;margin-bottom:18px" data-i18n="events-title">Partnerships & Events</h2>
+          <div class="event-card" style="--color:#FFB800;margin-bottom:14px">
             <div class="ev-header">
               <div class="ev-icon" style="background:#FFF8E0">🤝</div>
-              <div>
-                <div class="ev-title">This Week</div>
-                <div class="ev-sub">2 Strategic Meetings</div>
-              </div>
+              <div><div class="ev-title" data-i18n="events-done-header">This Week</div><div class="ev-sub" data-i18n="events-done-sub">2 Strategic Meetings</div></div>
             </div>
             <ul class="ev-list done-list">
-              <li>ChatandBuild — potential partnership meeting</li>
-              <li>Mandala Club — programming conversation for April</li>
+              <li data-i18n="events-done-1">ChatandBuild — potential partnership meeting</li>
+              <li data-i18n="events-done-2">Mandala Club — programming conversation for April</li>
             </ul>
           </div>
           <div class="event-card" style="--color:#00C9A7">
             <div class="ev-header">
               <div class="ev-icon" style="background:#E0FFF8">📅</div>
-              <div>
-                <div class="ev-title">Next Steps</div>
-                <div class="ev-sub">Activate & Propose</div>
-              </div>
+              <div><div class="ev-title" data-i18n="events-next-header">Next Steps</div><div class="ev-sub" data-i18n="events-next-sub">Activate & Propose</div></div>
             </div>
             <ul class="ev-list">
-              <li>Attend ChatandBuild IWD event</li>
-              <li>Attend PRCA Conference</li>
-              <li>Propose AI programming topics to Mandala Club</li>
-              <li>Initiate formal partnership with ChatandBuild</li>
+              <li data-i18n="events-next-1">Attend ChatandBuild IWD event</li>
+              <li data-i18n="events-next-2">Attend PRCA Conference</li>
+              <li data-i18n="events-next-3">Propose AI programming topics to Mandala Club</li>
+              <li data-i18n="events-next-4">Initiate formal partnership with ChatandBuild</li>
             </ul>
           </div>
         </div>
@@ -750,35 +501,23 @@
     </div>
   </div>
 
-  <!-- SLIDE 9: CLOSING / LOOKING AHEAD -->
+  <!-- SLIDE 9: CLOSING -->
   <div class="slide slide-close">
     <div class="cover-glow" style="opacity:0.4;top:20%"></div>
     <div style="text-align:center;position:relative;z-index:1;max-width:900px;width:100%">
-      <div class="section-label white" style="justify-content:center">The Week Ahead</div>
-      <h2 class="slide-title white" style="font-size:40px;margin-bottom:8px">Momentum is <span style="background:linear-gradient(90deg,#B79FFF,#FF9ECD);-webkit-background-clip:text;-webkit-text-fill-color:transparent">just getting started.</span></h2>
-      <p style="color:rgba(255,255,255,0.45);font-size:15px;margin-bottom:40px">Key actions rolling out across all 5 objectives over the next two weeks.</p>
+      <div class="section-label white" style="justify-content:center" data-i18n="close-section">The Week Ahead</div>
+      <h2 class="slide-title white" style="font-size:38px;margin-bottom:8px" data-i18n="close-title">Momentum is <span style="background:linear-gradient(90deg,#B79FFF,#FF9ECD);-webkit-background-clip:text;-webkit-text-fill-color:transparent">just getting started.</span></h2>
+      <p style="color:rgba(255,255,255,0.45);font-size:15px;margin-bottom:36px" data-i18n="close-subtitle">Key actions rolling out across all 5 objectives over the next two weeks.</p>
       <div class="close-grid">
-        <div class="close-card">
-          <div class="icon">🚀</div>
-          <h4>RiteSet 2.0</h4>
-          <p>App flow, AI logic, design and submission — all by 6 March</p>
-        </div>
-        <div class="close-card">
-          <div class="icon">📣</div>
-          <h4>SoulGarden PR Push</h4>
-          <p>Press release, 100+ media outreach, e27 newsletter & podcast — all in March</p>
-        </div>
-        <div class="close-card">
-          <div class="icon">⚡</div>
-          <h4>Hackathon & Events</h4>
-          <p>University outreach, Lu.ma posts, PRCA conference & Mandala Club proposals</p>
-        </div>
+        <div class="close-card"><div class="icon">🚀</div><h4 data-i18n="close-c1-title">RiteSet 2.0</h4><p data-i18n="close-c1-desc">App flow, AI logic, design and submission — all by 6 March</p></div>
+        <div class="close-card"><div class="icon">🌱</div><h4 data-i18n="close-c2-title">SoulGarden Growth Push</h4><p data-i18n="close-c2-desc">Media kit outreach, e27 newsletter, podcast & soft launch party — all in March</p></div>
+        <div class="close-card"><div class="icon">⚡</div><h4 data-i18n="close-c3-title">Hackathon & Events</h4><p data-i18n="close-c3-desc">University outreach, Lu.ma posts, PRCA conference & Mandala Club proposals</p></div>
       </div>
-      <div style="margin-top:36px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px 32px;display:inline-flex;align-items:center;gap:16px">
-        <span style="font-size:24px">🌙</span>
+      <div style="margin-top:28px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:18px 28px;display:inline-flex;align-items:center;gap:14px">
+        <span style="font-size:22px">🌙</span>
         <div style="text-align:left">
-          <p style="font-size:14px;font-weight:700;color:white">On the radar: Moonshot AI</p>
-          <p style="font-size:13px;color:rgba(255,255,255,0.45)">Call to be scheduled — strategic opportunity in motion.</p>
+          <p style="font-size:14px;font-weight:700;color:white" data-i18n="close-moonshot">On the radar: Moonshot AI</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.45)" data-i18n="close-moonshot-desc">Call to be scheduled — strategic opportunity in motion.</p>
         </div>
       </div>
     </div>
@@ -787,58 +526,280 @@
 </div>
 
 <script>
-  const slides = document.querySelectorAll('.slide');
-  const totalSlides = slides.length;
-  let currentSlide = 0;
-  let isAnimating = false;
+// ─── TRANSLATIONS ───────────────────────────────────────────────────────────
+const i18n = {
+  en: {
+    'cover-tag': 'Weekly Momentum Report · 26 Feb 2026',
+    'cover-title': 'Launches, Press &<br><span>Partnerships in Motion</span>',
+    'cover-subtitle': '5 Objectives · Milestones Achieved · What\'s Coming Next',
+    'cover-role': 'ChronoAI · Marketing & Partnerships',
+    'cover-week': 'Week of 20 – 26 Feb 2026',
+    'glance-title': 'This Week at a Glance',
+    'glance-subtitle': 'Five objectives — all moving forward.',
+    'glance-riteset-status': 'App Store Ready',
+    'glance-riteset-badge': '1.0 Live ✓',
+    'glance-sg-status': 'Organic Growth Push',
+    'glance-sg-badge': '3 Wins ✓',
+    'glance-hack-status': 'Proposal drafted',
+    'glance-hack-badge': 'In Progress',
+    'glance-events-status': '2 Partnership Meetings',
+    'glance-events-badge': 'Active ✓',
+    'glance-moonshot-status': 'Call Scheduled',
+    'glance-moonshot-badge': 'Upcoming',
+    'win-title': 'RiteSet 1.0 is <span>App Store Ready</span>',
+    'win-desc': 'As of 25 February, RiteSet 1.0 has been approved and is ready for distribution on the App Store. Through the SoulGarden upload process, the team has been fully educated on submission requirements — and we got it approved in just <strong style="color:white">2–3 days.</strong>',
+    'win-stat1-label': 'Days to Approval',
+    'win-stat2-label': 'Version Live',
+    'win-stat3-label': 'App Store Ready',
+    'riteset-section-label': 'Objective 1 · RiteSet',
+    'riteset-next-title': 'RiteSet 2.0 — What\'s Next',
+    'app-track-label': 'App Submission Track',
+    'mkt-track-label': 'Marketing Track',
+    'tl1-title': 'App Flow Update',
+    'tl1-desc': 'Current experience refresh — new flows locked in',
+    'tl2-title': 'Backend AI Logic',
+    'tl2-desc': 'Refining the intelligence layer — smarter, faster, better',
+    'tl3-title': 'Design & Branding Finalisation',
+    'tl3-desc': 'Polish UI, finalize visual identity and logic',
+    'tl4-title': 'Submit RiteSet 2.0 🚀',
+    'tl4-desc': 'Final version submitted to App Store',
+    'tl5-title': 'Marketing Planning',
+    'tl5-desc': 'Go-to-market strategy, positioning and channels',
+    'tl6-title': 'Marketing Assets Creation',
+    'tl6-desc': 'Creatives, copy, and campaign assets ready to ship',
+    'focus-label': 'Focus Areas for 2.0',
+    'focus-ui': 'UI Design',
+    'focus-ai': 'Backend AI',
+    'focus-brand': 'Branding',
+    'sg-section-label': 'Objective 2 · SoulGarden',
+    'sg-wins-title': 'SoulGarden — Big Wins This Week',
+    'sg-wins-subtitle': 'Building momentum through community and organic growth.',
+    'ach1-title': 'Media Kit Completed',
+    'ach1-desc': 'Press-ready kit for outreach to 100+ media contacts.',
+    'ach2-title': 'Era of AI Podcast Secured',
+    'ach2-desc': 'Featuring Wendy — scripting underway, recording in March.',
+    'ach3-title': 'SoulGarden Soft Launch Party — 12 March',
+    'ach3-desc': 'Proposal underway. Community event to amplify launch momentum.',
+    'organic-title': 'Strategic Pivot: Organic-First Growth',
+    'organic-desc': 'After team discussion, we\'re stepping back from press releases and paid distribution. Our focus is now on community-led growth, organic content, and earned media — a more authentic path to building lasting user trust.',
+    'luma-section': 'SoulGarden · Soft Launch',
+    'luma-title': 'First Bloom — Save the Date 🌸',
+    'luma-subtitle': 'A fresh look into AI Manifestation',
+    'luma-date': 'Thursday, 12 March · 3:30 PM – 6:00 PM SGT',
+    'luma-venue': '8 Marina Boulevard, MBFC Tower 1, #14-02',
+    'luma-desc': 'Celebrate the launch of SoulGarden — the AI manifestation app where your wildest dreams become adorable, collectible plants. Built by women, for anyone ready to manifest with a little magic. Hosted by ChronoAI.',
+    'luma-cta': '🔗 Posted on Lu.ma · One-Click RSVP',
+    'sg-next-title': 'SoulGarden — Next Steps',
+    'sg-tl1-title': 'Media Kit Blast — 100+ Press Contacts',
+    'sg-tl1-desc': 'Send media kits with SoulGarden live link to press and media outlets globally.',
+    'sg-tl2-title': 'e27 Newsletter Feature',
+    'sg-tl2-desc': '180K followers — SoulGarden featured in Southeast Asia\'s premier tech newsletter.',
+    'sg-tl3-title': 'Era of AI Podcast — with Wendy',
+    'sg-tl3-desc': 'Script in March, recording in March. Release end March or April.',
+    'sg-tl4-title': 'Soft Launch Party 🎊',
+    'sg-tl4-desc': 'Finalize event proposal and post to Lu.ma. Community gathering to celebrate SoulGarden\'s launch.',
+    'hack-section': 'Objective 3 · ChronoAI',
+    'hack-title': '1st Hackathon',
+    'hack-done-header': 'This Week',
+    'hack-done-sub': 'Hackathon Proposal Drafted',
+    'hack-done-1': 'Hackathon proposal completed',
+    'hack-next-header': 'Next Steps',
+    'hack-next-sub': 'Finalize & Launch',
+    'hack-next-1': 'Finalize proposal and post to Lu.ma',
+    'hack-next-2': 'Reach out to all major universities in Singapore',
+    'events-section': 'Objective 4 · Events',
+    'events-title': 'Partnerships & Events',
+    'events-done-header': 'This Week',
+    'events-done-sub': '2 Strategic Meetings',
+    'events-done-1': 'ChatandBuild — potential partnership meeting',
+    'events-done-2': 'Mandala Club — programming conversation for April',
+    'events-next-header': 'Next Steps',
+    'events-next-sub': 'Activate & Propose',
+    'events-next-1': 'Attend ChatandBuild IWD event',
+    'events-next-2': 'Attend PRCA Conference',
+    'events-next-3': 'Propose AI programming topics to Mandala Club',
+    'events-next-4': 'Initiate formal partnership with ChatandBuild',
+    'close-section': 'The Week Ahead',
+    'close-title': 'Momentum is <span style="background:linear-gradient(90deg,#B79FFF,#FF9ECD);-webkit-background-clip:text;-webkit-text-fill-color:transparent">just getting started.</span>',
+    'close-subtitle': 'Key actions rolling out across all 5 objectives over the next two weeks.',
+    'close-c1-title': 'RiteSet 2.0',
+    'close-c1-desc': 'App flow, AI logic, design and submission — all by 6 March',
+    'close-c2-title': 'SoulGarden Growth Push',
+    'close-c2-desc': 'Media kit outreach, e27 newsletter, podcast & soft launch party — all in March',
+    'close-c3-title': 'Hackathon & Events',
+    'close-c3-desc': 'University outreach, Lu.ma posts, PRCA conference & Mandala Club proposals',
+    'close-moonshot': 'On the radar: Moonshot AI',
+    'close-moonshot-desc': 'Call to be scheduled — strategic opportunity in motion.',
+  },
+  zh: {
+    'cover-tag': '每周进度报告 · 2026年2月26日',
+    'cover-title': '发布、媒体与<br><span>合作全面推进</span>',
+    'cover-subtitle': '5大目标 · 里程碑成就 · 下一步计划',
+    'cover-role': 'ChronoAI · 市场营销与合作',
+    'cover-week': '2026年2月20日至26日',
+    'glance-title': '本周概览',
+    'glance-subtitle': '五大目标——全面推进。',
+    'glance-riteset-status': 'App Store 已就绪',
+    'glance-riteset-badge': '1.0 已上线 ✓',
+    'glance-sg-status': '自然增长策略推进中',
+    'glance-sg-badge': '3项成果 ✓',
+    'glance-hack-status': '提案已起草',
+    'glance-hack-badge': '进行中',
+    'glance-events-status': '2场合作洽谈',
+    'glance-events-badge': '已激活 ✓',
+    'glance-moonshot-status': '电话已安排',
+    'glance-moonshot-badge': '即将进行',
+    'win-title': 'RiteSet 1.0 <span>已通过 App Store 审核</span>',
+    'win-desc': '截至2月25日，RiteSet 1.0已获批准，正式可在 App Store 上分发。通过 SoulGarden 的上架流程，团队全面掌握了提交要求——仅用 <strong style="color:white">2至3天</strong> 便完成审核。',
+    'win-stat1-label': '天完成审核',
+    'win-stat2-label': '版本已上线',
+    'win-stat3-label': 'App Store 就绪',
+    'riteset-section-label': '目标一 · RiteSet',
+    'riteset-next-title': 'RiteSet 2.0——下一步计划',
+    'app-track-label': '应用提交计划',
+    'mkt-track-label': '营销计划',
+    'tl1-title': '应用流程更新',
+    'tl1-desc': '当前体验焕新——全新流程已确定',
+    'tl2-title': '后端AI逻辑优化',
+    'tl2-desc': '精炼智能层——更聪明、更快速、更强大',
+    'tl3-title': '设计与品牌定稿',
+    'tl3-desc': '打磨UI界面，确定视觉识别与产品逻辑',
+    'tl4-title': '提交 RiteSet 2.0 🚀',
+    'tl4-desc': '最终版本提交至 App Store',
+    'tl5-title': '营销规划',
+    'tl5-desc': '上市策略、市场定位与渠道规划',
+    'tl6-title': '营销素材制作',
+    'tl6-desc': '创意素材、文案与活动资产准备就绪',
+    'focus-label': '2.0 重点方向',
+    'focus-ui': 'UI设计',
+    'focus-ai': '后端AI',
+    'focus-brand': '品牌',
+    'sg-section-label': '目标二 · SoulGarden',
+    'sg-wins-title': 'SoulGarden——本周重大成果',
+    'sg-wins-subtitle': '以社群为核心，聚焦自然增长势能。',
+    'ach1-title': '媒体资料包已完成',
+    'ach1-desc': '面向100+媒体联系人的新闻资料包已准备就绪。',
+    'ach2-title': '《Era of AI》播客已确定',
+    'ach2-desc': '特邀 Wendy 参与——脚本撰写中，计划三月录制。',
+    'ach3-title': 'SoulGarden 软启动派对 — 3月12日',
+    'ach3-desc': '提案进行中。社群活动助力发布势能扩大。',
+    'organic-title': '战略调整：有机增长优先',
+    'organic-desc': '经团队讨论，我们决定暂缓新闻稿发布与付费分发渠道，转而专注于社群主导的自然增长、有机内容与赢得媒体曝光——以更真实的方式建立持久的用户信任。',
+    'luma-section': 'SoulGarden · 软启动',
+    'luma-title': '第一次绽放——预留日期 🌸',
+    'luma-subtitle': '探索 AI 显化的全新视角',
+    'luma-date': '3月12日（周四） · 下午3:30 – 6:00 SGT',
+    'luma-venue': '滨海林荫道8号，MBFC大厦1座，#14-02',
+    'luma-desc': '共庆 SoulGarden 正式上线——这款AI显化应用让你最狂野的梦想化为可爱的植物收藏。由女性打造，为所有准备好用一点魔法显化梦想的人而生。由 ChronoAI 主办。',
+    'luma-cta': '🔗 已发布至 Lu.ma · 一键报名',
+    'sg-next-title': 'SoulGarden——下一步计划',
+    'sg-tl1-title': '媒体资料包发送——100+媒体联系人',
+    'sg-tl1-desc': '向全球新闻媒体发送含 SoulGarden 上线链接的媒体资料包。',
+    'sg-tl2-title': 'e27 新闻简报特别推荐',
+    'sg-tl2-desc': '18万订阅者——SoulGarden 入选东南亚顶级科技新闻简报。',
+    'sg-tl3-title': '《Era of AI》播客——特邀 Wendy',
+    'sg-tl3-desc': '三月撰写脚本并录制，计划三月底或四月发布。',
+    'sg-tl4-title': '软启动派对 🎊',
+    'sg-tl4-desc': '确定活动提案并发布至 Lu.ma。社群聚会，共庆 SoulGarden 正式上线。',
+    'hack-section': '目标三 · ChronoAI',
+    'hack-title': '首届黑客马拉松',
+    'hack-done-header': '本周成果',
+    'hack-done-sub': '黑客马拉松提案已起草',
+    'hack-done-1': '黑客马拉松提案已完成',
+    'hack-next-header': '下一步计划',
+    'hack-next-sub': '确定方案并启动',
+    'hack-next-1': '确定提案并发布至 Lu.ma',
+    'hack-next-2': '联系新加坡各主要大学',
+    'events-section': '目标四 · 活动',
+    'events-title': '合作与活动',
+    'events-done-header': '本周成果',
+    'events-done-sub': '2场战略会议',
+    'events-done-1': 'ChatandBuild——潜在合作洽谈会议',
+    'events-done-2': 'Mandala Club——四月活动策划讨论',
+    'events-next-header': '下一步计划',
+    'events-next-sub': '激活并提案',
+    'events-next-1': '出席 ChatandBuild 三八妇女节活动',
+    'events-next-2': '出席 PRCA 大会',
+    'events-next-3': '向 Mandala Club 提议AI主题活动',
+    'events-next-4': '与 ChatandBuild 启动正式合作',
+    'close-section': '展望下周',
+    'close-title': '势能，<span style="background:linear-gradient(90deg,#B79FFF,#FF9ECD);-webkit-background-clip:text;-webkit-text-fill-color:transparent">才刚刚开始。</span>',
+    'close-subtitle': '未来两周内，5大目标的关键行动将全面推进。',
+    'close-c1-title': 'RiteSet 2.0',
+    'close-c1-desc': '应用流程、AI逻辑、设计与提交——全部于3月6日前完成',
+    'close-c2-title': 'SoulGarden 增长推进',
+    'close-c2-desc': '媒体资料包发送、e27简报、播客及软启动派对——均在三月内完成',
+    'close-c3-title': '黑客马拉松与活动',
+    'close-c3-desc': '大学推广、Lu.ma发布、PRCA大会及Mandala Club提案',
+    'close-moonshot': '关注中：Moonshot AI',
+    'close-moonshot-desc': '电话会议待安排——战略机遇正在推进中。',
+  }
+};
 
-  const navDots = document.getElementById('navDots');
-  const progress = document.getElementById('progress');
-  const counter = document.getElementById('counter');
+// ─── LANGUAGE TOGGLE ────────────────────────────────────────────────────────
+let currentLang = 'en';
 
-  // Build dots
-  slides.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.addEventListener('click', () => goTo(i));
-    navDots.appendChild(dot);
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  document.getElementById('langToggle').textContent = currentLang === 'en' ? '中文' : 'EN';
+  applyLang();
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = i18n[currentLang][key];
+    if (val !== undefined) el.innerHTML = val;
   });
+}
 
-  function updateUI() {
-    document.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === currentSlide);
-    });
-    progress.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
-    counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
-  }
+// ─── SLIDESHOW ───────────────────────────────────────────────────────────────
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+let isAnimating = false;
 
-  function goTo(index) {
-    if (isAnimating || index === currentSlide) return;
-    isAnimating = true;
-    const old = slides[currentSlide];
-    old.classList.add('exit');
-    setTimeout(() => { old.classList.remove('active', 'exit'); }, 450);
-    currentSlide = index;
-    const next = slides[currentSlide];
-    next.style.transform = 'translateX(40px)';
-    next.classList.add('active');
-    requestAnimationFrame(() => { next.style.transform = ''; });
-    updateUI();
-    setTimeout(() => { isAnimating = false; }, 500);
-  }
+const navDots = document.getElementById('navDots');
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
 
-  function changeSlide(dir) {
-    const next = (currentSlide + dir + totalSlides) % totalSlides;
-    goTo(next);
-  }
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+  dot.addEventListener('click', () => goTo(i));
+  navDots.appendChild(dot);
+});
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
-  });
+function updateUI() {
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  progress.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+  counter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+}
 
+function goTo(index) {
+  if (isAnimating || index === currentSlide) return;
+  isAnimating = true;
+  const old = slides[currentSlide];
+  old.classList.add('exit');
+  setTimeout(() => old.classList.remove('active', 'exit'), 440);
+  currentSlide = index;
+  const next = slides[currentSlide];
+  next.style.transform = 'translateX(40px)';
+  next.classList.add('active');
+  requestAnimationFrame(() => { next.style.transform = ''; });
   updateUI();
+  setTimeout(() => { isAnimating = false; }, 480);
+}
+
+function changeSlide(dir) { goTo((currentSlide + dir + totalSlides) % totalSlides); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+updateUI();
 </script>
 </body>
 </html>
